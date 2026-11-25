@@ -41,6 +41,24 @@ Sample listings have no fabricated photos; upload real property media through ad
 - `media/`: uploaded property images/videos (created as needed)
 - `db.sqlite3`: local development database (created by `migrate`)
 
-## Deployment notes
+## Deploy on Render
 
-Before public deployment, set a strong `SECRET_KEY` through environment variables, set `DEBUG=False`, configure `ALLOWED_HOSTS`, use HTTPS, and move uploaded media to durable object storage. Video file delivery is best served by a media/CDN service.
+1. Push the project to GitHub and open the [Render Dashboard](https://dashboard.render.com/).
+2. Create a PostgreSQL database in Render. Keep it in the same region as the web service.
+3. Choose **New > Web Service**, connect `adarshsuraj926499/real-estate-varanasi`, and select the `main` branch.
+4. Configure the service:
+   - **Language:** Python
+   - **Build Command:** `bash build.sh`
+   - **Start Command:** `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT`
+5. Add these environment variables to the web service:
+   - `SECRET_KEY`: generate a secret value in Render; never put it in GitHub.
+   - `DEBUG`: `False`
+   - `DATABASE_URL`: the database's **internal** URL from Render.
+   - `ALLOWED_HOSTS`: optional for the Render hostname (it is detected automatically); for a custom domain, add the hostname here.
+   - `CSRF_TRUSTED_ORIGINS`: for a custom domain, set its full HTTPS origin, for example `https://www.example.com`.
+6. Create the service and wait for the build and deploy to finish. The build collects static files and applies database migrations.
+7. Open the service's **Shell** and run `python manage.py createsuperuser`, then visit `/admin/` on the service URL.
+
+Render's default filesystem is temporary. For uploaded property photos and videos to survive deploys, attach a persistent disk to the web service (a paid Render feature), set its mount path to `/var/data`, and add `MEDIA_ROOT=/var/data/media` to the service's environment variables. Re-upload the local video through the live admin after deployment; `media/` and `db.sqlite3` are intentionally not stored in GitHub.
+
+The local development setup continues to use SQLite and the local media directory when the Render environment variables are not set.
