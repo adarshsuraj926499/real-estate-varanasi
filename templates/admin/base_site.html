@@ -1,0 +1,7 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block title %}{{ title }} | GhatNiva Admin{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/admin.css' %}?v=2"><link rel="stylesheet" href="{% static 'css/admin-inline.css' %}?v=2">{% endblock %}
+{% block branding %}
+<a class="ghat-admin-brand" href="{% url 'admin:index' %}"><img src="{% static 'images/ghatniya-logo.png' %}" alt="GhatNiva"><span><strong>GHATNIVA</strong><small>PROPERTY CONSOLE</small></span></a>
+{% endblock %}

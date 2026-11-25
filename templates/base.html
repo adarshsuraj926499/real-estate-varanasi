@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>{% block title %}GhatNiva Properties | Your Plot. Your Home. Your Kashi.{% endblock %}</title>
+  <meta name="description" content="Discover handpicked plots and duplex homes in Varanasi with GhatNiva Properties.">
+  {% load static %}<link rel="icon" href="{% static 'images/ghatniya-logo.png' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+<body>
+<header class="site-header"><div class="nav-wrap">
+  <a class="brand" href="{% url 'home' %}"><img src="{% static 'images/ghatniya-logo.png' %}" alt="GhatNiva Properties"><span><b>GHATNIVA</b><small>PROPERTIES · VARANASI</small></span></a>
+  <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  <nav class="main-nav"><a href="{% url 'home' %}">Home</a><a href="{% url 'plot_list' %}">Plots</a><a href="{% url 'duplex_list' %}">Duplex</a><a href="{% url 'contact' %}">Contact</a><a class="nav-cta" href="{% url 'general_enquiry' %}">Enquire now <span>↗</span></a></nav>
+</div></header>
+<main>{% block content %}{% endblock %}</main>
+<footer class="footer"><div class="footer-top"><a class="brand" href="{% url 'home' %}"><img src="{% static 'images/ghatniya-logo.png' %}" alt=""><span><b>GHATNIVA</b><small>PROPERTIES · VARANASI</small></span></a><p>Your plot. Your home. Your Kashi.</p><a href="{% url 'general_enquiry' %}">Send an enquiry ↗</a></div><div class="footer-bottom"><span>© {% now "Y" %} GhatNiva Properties</span><a href="/admin/">Admin login</a><span>Made for a life rooted in Kashi.</span></div></footer>
+<script>
+const toggle=document.querySelector('.menu-toggle'); if(toggle) toggle.addEventListener('click',()=>{const nav=document.querySelector('.main-nav'); const open=nav.classList.toggle('open'); toggle.setAttribute('aria-expanded',open)});
+</script>
+</body></html>

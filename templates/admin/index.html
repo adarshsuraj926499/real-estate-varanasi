@@ -1,0 +1,13 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+{% block content %}
+<section class="admin-welcome">
+  <div><span>GHATNIVA · VARANASI</span><h1>Good to see you, {{ user.get_short_name|default:user.username }}.</h1><p>Manage property listings and keep customer conversations moving.</p></div>
+  <div class="admin-welcome-mark">⌂</div>
+</section>
+<div class="admin-shortcuts">
+  <a href="{% url 'admin:properties_property_changelist' %}" class="admin-shortcut"><span class="shortcut-icon">⌂</span><span><small>LISTINGS</small><strong>Manage properties</strong><em>Add, edit or publish homes</em></span><b>↗</b></a>
+  <a href="{% url 'admin:properties_enquiry_changelist' %}" class="admin-shortcut"><span class="shortcut-icon">✉</span><span><small>CUSTOMER CONTACT</small><strong>Review enquiries</strong><em>Names, phone numbers and messages</em></span><b>↗</b></a>
+</div>
+{{ block.super }}
+{% endblock %}
