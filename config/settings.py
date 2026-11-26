@@ -69,14 +69,27 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-if database_url := os.environ.get("DATABASE_URL"):
+database_url = os.environ.get("DATABASE_URL", "").strip()
+if not DEBUG and not database_url:
+    raise RuntimeError(
+        "DATABASE_URL is required in production. Set it to the full Internal "
+        "Database URL from your Render PostgreSQL service."
+    )
+if database_url:
     import dj_database_url
 
-    DATABASES["default"] = dj_database_url.parse(
-        database_url,
-        conn_max_age=600,
-        ssl_require=not DEBUG,
-    )
+    try:
+        DATABASES["default"] = dj_database_url.parse(
+            database_url,
+            conn_max_age=600,
+            ssl_require=not DEBUG,
+        )
+    except dj_database_url.UnknownSchemeError as exc:
+        raise RuntimeError(
+            "DATABASE_URL must be the complete Internal Database URL from "
+            "Render PostgreSQL, starting with postgres:// or postgresql://. "
+            "Do not enter only the database name."
+        ) from exc
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
