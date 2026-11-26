@@ -57,7 +57,8 @@ Sample listings have no fabricated photos; upload real property media through ad
    - `ALLOWED_HOSTS`: optional for the Render hostname (it is detected automatically); for a custom domain, add the hostname here.
    - `CSRF_TRUSTED_ORIGINS`: for a custom domain, set its full HTTPS origin, for example `https://www.example.com`.
 6. Create the service and wait for the build and deploy to finish. The build collects static files and applies database migrations.
-7. Open the service's **Shell** and run `python manage.py createsuperuser`, then visit `/admin/` on the service URL.
+7. For a free Render web service (where Shell access is unavailable), set temporary environment variables `RENDER_BOOTSTRAP_ADMIN_USERNAME` and `RENDER_BOOTSTRAP_ADMIN_PASSWORD`. Use `reena` as the username and a new, strong password. Saving these variables starts a deploy; the build creates or repairs this superuser without printing the password. After the deploy succeeds, remove both temporary variables from the service environment and save again. Visit `/admin/` on the service URL to log in. Never commit or share the password.
+8. For a paid web service with Shell access, you can instead run `python manage.py createsuperuser` from the service Shell and skip the temporary bootstrap variables.
 
 Render's default filesystem is temporary. For uploaded property photos and videos to survive deploys, attach a persistent disk to the web service (a paid Render feature), set its mount path to `/var/data`, and add `MEDIA_ROOT=/var/data/media` to the service's environment variables. Re-upload the local video through the live admin after deployment; `media/` and `db.sqlite3` are intentionally not stored in GitHub.
 
